@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_Clima_MAUI.MainPage">
+    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,*" Padding="10">
+        <Entry x:Name="txt_city" Grid.Column="0" Grid.Row="0" Keyboard="Text" />
+        
+        <!-- Utilização de Ícone (Font Awesome) -->
+        <Button x:Name="btn_search" Grid.Column="1" Grid.Row="0" Text="&#xf002;" FontFamily="FontAwesomeFreeSolid900" Clicked="btn_search_Clicked"/>
+
+        <WebView x:Name="wbview_localization" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"/>
+    </Grid>
+</ContentPage>
