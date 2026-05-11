@@ -1,7 +1,8 @@
-﻿using App_Clima_MAUI.Model;
+﻿using System.Text;
+
+using App_Clima_MAUI.Model;
 
 using App_Clima_MAUI.Service;
-using System.Text;
 
 namespace App_Clima_MAUI
 {
@@ -12,7 +13,26 @@ namespace App_Clima_MAUI
             InitializeComponent();
         }
 
-        private async void btn_search_Clicked(object sender, EventArgs e)
+		private async void LoadCity(double lat, double lon)
+		{
+			try
+			{
+				IEnumerable<Placemark> places = await Geocoding.Default.GetPlacemarksAsync(lat, lon);
+
+				Placemark? place = places.FirstOrDefault();
+
+				if (place != null)
+				{
+					txt_city.Text = place.Locality;
+				}
+			}
+			catch (Exception ex)
+			{
+				await DisplayAlertAsync("Erro!", ex.Message, "OK");
+			}
+		}
+
+		private async void btn_search_Clicked(object sender, EventArgs e)
         {
             try
             {
@@ -44,5 +64,40 @@ namespace App_Clima_MAUI
                 await DisplayAlertAsync("Erro!", ex.Message, "OK");
             }
         }
-    }
+
+        private async void btn_current_locality_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                GeolocationRequest current_locality_request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
+
+                Location? current_locality = await Geolocation.Default.GetLocationAsync(current_locality_request);
+
+                if (current_locality != null)
+                {
+                    LoadCity(current_locality.Latitude, current_locality.Longitude);
+                }
+                else
+                {
+                    throw new Exception("Localização atual não encontrada!");
+                }
+            }
+            catch (FeatureNotEnabledException)
+            {
+                await DisplayAlertAsync("Erro!", "Uso de localização não habilitado no dispositivo.", "OK");
+            }
+            catch (FeatureNotSupportedException)
+            {
+                await DisplayAlertAsync("Erro!", "Uso de localização não suportado pelo dispositivo.", "OK");
+            }
+            catch (PermissionException)
+            {
+				await DisplayAlertAsync("Erro!", "Uso de localização não permitido.", "OK");
+			}
+            catch (Exception ex)
+            {
+                await DisplayAlertAsync("Erro!", ex.Message, "OK");
+            }
+		}
+	}
 }
