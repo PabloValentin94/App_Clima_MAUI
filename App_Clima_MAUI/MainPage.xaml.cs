@@ -54,7 +54,7 @@ namespace App_Clima_MAUI
 
                     raw_link.Append("https://embed.windy.com/embed.html?type=map&location=coordinates");
                     raw_link.Append("&metricRain=mm&metricTemp=°C&metricWind=km/h&zoom=5&overlay=wind&");
-                    raw_link.Append($"product=ecmwf&level=surface&lat={weather.coord.lat}&lon={weather.coord.lon}");
+                    raw_link.Append($"product=ecmwf&level=surface&lat={normalized_lat}&lon={normalized_lon}");
 
                     wbview_localization.Source = new Uri(raw_link.ToString());
                 }
